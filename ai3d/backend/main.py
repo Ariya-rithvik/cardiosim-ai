@@ -38,3 +38,14 @@ def health():
         "genie_enabled": bool(os.getenv("GOOGLE_GENAI_API_KEY")),
         "video_generation_enabled": bool(os.getenv("VIDEO_GENERATION_ENABLED")),
     }
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(
+        "main:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=True,
+        reload_dirs=["routes"],
+    )

@@ -109,12 +109,13 @@ An intelligent emergency cardiac care platform combining **MedGemma 4B** for med
 │                   TRAINING & MENTORING PIPELINE                 │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                   │
-│  VIDEO GENERATION (Procedure Training):                          │
-│  1. Procedure Selection (STEMI/CPR/PCI) → Endpoint              │
-│  2. Gemini 2.5 Flash Storyboarding    → 12-Frame Sequence      │
-│  3. AI Narration per Frame             → Educational Text      │
-│  4. Frame Visualization               → Interactive Player     │
-│  5. Future: Imagen 4.0 Images + Veo 3.1 Video Synthesis        │
+│  VIDEO GENERATION (Procedure Training): ✅ Live with AI Horde              │
+│  1. Procedure Selection (STEMI/CPR/PCI) → Endpoint                        │
+│  2. AI Image Generation (6 frames)      → AI Horde Community GPUs         │
+│  3. Parallel Job Submission             → All images generated together   │
+│  4. Frame Compositing                   → Step counter + description      │
+│  5. MP4 Encoding (libx264)              → 1280x720 video @ 1fps           │
+│  6. Frontend Video Player               → Download + stream support       │
 │                                                                   │
 │  CPR TECHNIQUE ANALYSIS (Real-time):                             │
 │  1. MediaPipe Pose Detection           → Hand/Arm Landmarks    │
@@ -164,12 +165,15 @@ An intelligent emergency cardiac care platform combining **MedGemma 4B** for med
 - **Image Analysis**: Real-time camera feed analysis for environment assessment
 - **Critical Safety Warnings**: Pulsing alerts for time-sensitive actions
 
-### 🎬 **Video Training Module**
-- **Interactive Procedure Videos**: 12-frame sequences with AI narration
-- **Playback Controls**: Frame navigation, auto-play, speed control
-- **Procedure Library**: STEMI Protocol, CPR Technique, PCI Intervention
-- **Frame-by-Frame Narration**: Gemini-generated educational commentary
-- **Future**: Full video synthesis with Imagen (images) + Veo (video)
+### 🎬 **Video Training Module** ✅ *Now Live with AI Horde*
+- **AI-Generated Videos**: Real medical procedure videos with AI Horde (free GPUs)
+- **6-Frame Medical Scenes**: Realistic AI-generated images showing procedures (CPR, STEMI, PCI)
+- **MP4 Video Export**: 1280x720 video files with professional overlays and metadata
+- **Playback Controls**: Full HTML5 video player with download capability
+- **Procedure Library**: CPR, STEMI Protocol, PCI Balloon Intervention
+- **Frame Compositing**: Step counter, descriptions, progress bar overlay
+- **Narration Support**: Frame-by-frame AI-generated commentary (Gemini)
+- **Free & Fast**: ~90 seconds for complete 6-frame AI video using community GPUs
 
 ### 🫀 **Cardiac Diagnosis Engine**
 - **Multi-scenario Analysis**: Patient history, ECG, risk factors
@@ -314,10 +318,11 @@ node --version
 Create `.env` file in backend directory:
 
 ```ini
-# Google Generative AI (Required)
+# Google Generative AI (Optional - Only needed for Veo 3.1 videos)
+# If not set, AI Horde will be used for free video generation
 GOOGLE_GENAI_API_KEY=AIzaSyALIqrICDMzMcWvXVf40yxJV62_A4KW93M
 
-# Model Configuration
+# Model Configuration (Only used if GOOGLE_GENAI_API_KEY is set)
 VIDEO_MODEL=gemini-2.5-flash
 VIDEO_IMAGE_MODEL=imagen-4.0-ultra-generate-001
 VIDEO_SYNTHESIS_MODEL=veo-3.1-generate-preview
@@ -327,6 +332,11 @@ DEBUG=True
 LOG_LEVEL=info
 MAX_UPLOAD_SIZE=52428800  # 50MB
 ```
+
+**Notes:**
+- ✅ **AI Horde (Default)**: No API key required! Uses free community GPUs at aihorde.net
+- 🔑 **Veo 3.1 (Optional)**: Requires Google Generative AI key for premium video synthesis
+- 🎬 **Video Generation**: Auto-falls back from Veo → AI Horde → Text-only frames
 
 ---
 
@@ -468,35 +478,56 @@ Content-Type: application/json
 }
 ```
 
-### Video Generation
+### Video Generation — AI Horde Integration ✅
 ```http
-POST /api/video-generation
+POST /api/video-generation/huggingface-simple
 Content-Type: application/json
 
 {
-  "procedure": "STEMI",
-  "target_audience": "medical_student"
+  "procedure": "CPR",
+  "urgency": "Immediate",
+  "steps": ["Check responsiveness", "Call 911", "Begin CPR"],
+  "duration": 60
 }
 ```
 
 **Response:**
 ```json
 {
-  "video_id": "vid_stemi_001",
-  "procedure": "STEMI",
-  "frames": 12,
-  "duration_seconds": 60,
-  "frames_data": [
-    {
-      "frame_number": 1,
-      "title": "Patient Assessment",
-      "narration": "Begin with rapid patient assessment...",
-      "key_focus": ["vital signs", "chest pain", "dyspnea"]
-    },
-    ...
-  ]
+  "status": "ready_ai_video",
+  "video_url": "/api/video-generation/download?file=ai_CPR_1771969504.mp4",
+  "description": "AI-generated medical video for CPR",
+  "frames": 6,
+  "estimated_duration": 18
 }
 ```
+
+**Download Generated Video:**
+```http
+GET /api/video-generation/download?file=ai_CPR_1771969504.mp4
+```
+
+**Features:**
+- ✅ Free AI Horde community GPUs (no API key required)
+- ✅ 6-frame medical procedure videos
+- ✅ Parallel image generation (~90 seconds total)
+- ✅ MP4 video format (1280x720 @ 1fps)
+- ✅ Automatic compositing with overlays
+- ✅ Full download support
+- ✅ Fallback to text-only videos if needed
+
+### Original Video Generation (Veo 3.1 — Requires API Key)
+```http
+POST /api/video-generation
+Content-Type: application/json
+
+{
+  "procedure": "STEMI",
+  "urgency": "Immediate"
+}
+```
+
+**Note:** Original Veo 3.1 endpoint still available but requires Google Generative AI API key. AI Horde endpoint is preferred for free, fast generation.
 
 ### Clinical Mentoring
 ```http
